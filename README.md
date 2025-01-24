@@ -11,6 +11,7 @@ as often you like. Everything within Data Definitions is extendable.
 ## Requirements
 * Pimcore 11
 
+
 ## Getting started
 ```bash
 # Install via composer
@@ -21,7 +22,7 @@ composer require instride/data-definitions
 // Add to config/bundles.php
 return [
     // ...
-    Instride\DataDefinitionsBundle\DataDefinitionsBundle::class => ['all' => true],
+    \Instride\Bundle\DataDefinitionsBundle\DataDefinitionsBundle::class => ['all' => true]
 ];
 ```
 
