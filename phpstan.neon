@@ -9,7 +9,6 @@ parameters:
         - '**/DependencyInjection/Configuration.php'
         - '**/Migrations/Version*.php'
         # Ignore cause the file uses external dependencies and will only be used if those dependencies are met
-        - '**/ProcessManager/*.php'
         - '**/CoreShop/*.php'
         - '**/Dao.php'
 

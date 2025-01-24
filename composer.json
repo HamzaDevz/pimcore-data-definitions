@@ -59,7 +59,6 @@
     "guzzlehttp/psr7": "< 2.0"
   },
   "suggest": {
-    "dpfaffenbauer/process-manager": "Allows to start Imports/Exports from within Pimcore UI and also tracks Status of current processes.",
     "guzzlehttp/psr7": "For downloading external data like Images"
   },
   "autoload": {

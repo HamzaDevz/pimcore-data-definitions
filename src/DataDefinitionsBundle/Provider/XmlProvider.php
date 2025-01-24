@@ -20,8 +20,6 @@ use Instride\Bundle\DataDefinitionsBundle\Filter\FilterInterface;
 use Instride\Bundle\DataDefinitionsBundle\Model\ExportDefinitionInterface;
 use Instride\Bundle\DataDefinitionsBundle\Model\ImportDefinitionInterface;
 use Instride\Bundle\DataDefinitionsBundle\Model\ImportMapping\FromColumn;
-use Instride\Bundle\DataDefinitionsBundle\ProcessManager\ArtifactGenerationProviderInterface;
-use Instride\Bundle\DataDefinitionsBundle\ProcessManager\ArtifactProviderTrait;
 use Pimcore\File;
 use Pimcore\Model\Asset;
 use Pimcore\Tool\Storage;
@@ -29,10 +27,8 @@ use Symfony\Component\Console\Exception\RuntimeException;
 use Symfony\Component\Process\Process;
 use XMLWriter;
 
-class XmlProvider extends AbstractFileProvider implements ImportProviderInterface, ExportProviderInterface, ArtifactGenerationProviderInterface
+class XmlProvider extends AbstractFileProvider implements ImportProviderInterface, ExportProviderInterface
 {
-    use ArtifactProviderTrait;
-
     private XMLWriter $writer;
 
     private string $exportPath;
@@ -170,11 +166,6 @@ class XmlProvider extends AbstractFileProvider implements ImportProviderInterfac
         $file = $this->getFile($params);
         copy($this->getExportPath(), $file);
         unlink($this->getExportPath());
-    }
-
-    public function provideArtifactStream($configuration, ExportDefinitionInterface $definition, $params)
-    {
-        return fopen($this->getExportPath(), 'rb');
     }
 
     private function getXMLWriter(): XMLWriter

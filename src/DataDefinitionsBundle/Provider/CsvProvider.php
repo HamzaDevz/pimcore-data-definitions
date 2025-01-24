@@ -21,16 +21,12 @@ use Instride\Bundle\DataDefinitionsBundle\Filter\FilterInterface;
 use Instride\Bundle\DataDefinitionsBundle\Model\ExportDefinitionInterface;
 use Instride\Bundle\DataDefinitionsBundle\Model\ImportDefinitionInterface;
 use Instride\Bundle\DataDefinitionsBundle\Model\ImportMapping\FromColumn;
-use Instride\Bundle\DataDefinitionsBundle\ProcessManager\ArtifactGenerationProviderInterface;
-use Instride\Bundle\DataDefinitionsBundle\ProcessManager\ArtifactProviderTrait;
 use League\Csv\Reader;
 use League\Csv\Statement;
 use League\Csv\Writer;
 
-class CsvProvider extends AbstractFileProvider implements ImportProviderInterface, ExportProviderInterface, ArtifactGenerationProviderInterface
+class CsvProvider extends AbstractFileProvider implements ImportProviderInterface, ExportProviderInterface
 {
-    use ArtifactProviderTrait;
-
     private array $exportData = [];
 
     public function testData(array $configuration): bool
@@ -153,23 +149,5 @@ class CsvProvider extends AbstractFileProvider implements ImportProviderInterfac
         array $params,
     ): void {
         $this->exportData[] = $data;
-    }
-
-    public function provideArtifactStream(array $configuration, ExportDefinitionInterface $definition, array $params)
-    {
-        $headers = count($this->exportData) > 0 ? array_keys($this->exportData[0]) : [];
-
-        $stream = fopen('php://memory', 'rw+');
-
-        $writer = Writer::createFromStream($stream);
-        $writer->setDelimiter($configuration['delimiter']);
-        $writer->setEnclosure($configuration['enclosure']);
-        if (isset($configuration['escape'])) {
-            $writer->setEscape($configuration['escape']);
-        }
-        $writer->insertOne($headers);
-        $writer->insertAll($this->exportData);
-
-        return $stream;
     }
 }
