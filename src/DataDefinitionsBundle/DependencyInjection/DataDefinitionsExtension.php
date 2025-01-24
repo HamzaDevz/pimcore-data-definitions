@@ -40,6 +40,7 @@ use Instride\Bundle\DataDefinitionsBundle\Provider\ImportProviderInterface;
 use Instride\Bundle\DataDefinitionsBundle\Runner\ExportRunnerInterface;
 use Instride\Bundle\DataDefinitionsBundle\Runner\RunnerInterface;
 use Instride\Bundle\DataDefinitionsBundle\Setter\SetterInterface;
+use Pimcore\Bundle\SimpleBackendSearchBundle\PimcoreSimpleBackendSearchBundle;
 use Pimcore\Config\LocationAwareConfigRepository;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -84,6 +85,7 @@ class DataDefinitionsExtension extends AbstractModelExtension implements Prepend
             $loader->load('process_manager.yml');
         }
 
+        $this->registerDependantBundles('coreshop', [PimcoreSimpleBackendSearchBundle::class], $container);
         $this->registerPimcoreResources('data_definitions', $config['pimcore_admin'], $container);
 
         $container
