@@ -19,8 +19,6 @@ use Instride\Bundle\DataDefinitionsBundle\Filter\FilterInterface;
 use Instride\Bundle\DataDefinitionsBundle\Model\ExportDefinitionInterface;
 use Instride\Bundle\DataDefinitionsBundle\Model\ImportDefinitionInterface;
 use Instride\Bundle\DataDefinitionsBundle\Model\ImportMapping\FromColumn;
-use Instride\Bundle\DataDefinitionsBundle\ProcessManager\ArtifactGenerationProviderInterface;
-use Instride\Bundle\DataDefinitionsBundle\ProcessManager\ArtifactProviderTrait;
 use OpenSpout\Common\Entity\Row;
 use OpenSpout\Reader\ReaderInterface;
 use OpenSpout\Reader\XLSX\Reader;
@@ -29,10 +27,8 @@ use OpenSpout\Writer\XLSX\Writer;
 use Pimcore\Model\Asset;
 use Pimcore\Tool\Storage;
 
-class ExcelProvider extends AbstractFileProvider implements ImportProviderInterface, ExportProviderInterface, ArtifactGenerationProviderInterface
+class ExcelProvider extends AbstractFileProvider implements ImportProviderInterface, ExportProviderInterface
 {
-    use ArtifactProviderTrait;
-
     private string $exportPath;
 
     private WriterInterface $writer;
@@ -139,11 +135,6 @@ class ExcelProvider extends AbstractFileProvider implements ImportProviderInterf
         $file = $this->getFile($params);
         copy($this->getExportPath(), $file);
         unlink($this->getExportPath());
-    }
-
-    public function provideArtifactStream($configuration, ExportDefinitionInterface $definition, $params)
-    {
-        return fopen($this->getExportPath(), 'rb');
     }
 
     private function createReader($path): ReaderInterface

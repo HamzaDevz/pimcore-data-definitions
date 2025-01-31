@@ -20,15 +20,11 @@ use Instride\Bundle\DataDefinitionsBundle\Filter\FilterInterface;
 use Instride\Bundle\DataDefinitionsBundle\Model\ExportDefinitionInterface;
 use Instride\Bundle\DataDefinitionsBundle\Model\ImportDefinitionInterface;
 use Instride\Bundle\DataDefinitionsBundle\Model\ImportMapping\FromColumn;
-use Instride\Bundle\DataDefinitionsBundle\ProcessManager\ArtifactGenerationProviderInterface;
-use Instride\Bundle\DataDefinitionsBundle\ProcessManager\ArtifactProviderTrait;
 use RecursiveArrayIterator;
 use RecursiveIteratorIterator;
 
-class JsonProvider extends AbstractFileProvider implements ImportProviderInterface, ExportProviderInterface, ArtifactGenerationProviderInterface
+class JsonProvider extends AbstractFileProvider implements ImportProviderInterface, ExportProviderInterface
 {
-    use ArtifactProviderTrait;
-
     /**
      * @var array
      */
@@ -114,13 +110,5 @@ class JsonProvider extends AbstractFileProvider implements ImportProviderInterfa
         array $params,
     ): void {
         $this->exportData[] = $data;
-    }
-
-    public function provideArtifactStream($configuration, ExportDefinitionInterface $definition, array $params)
-    {
-        $stream = fopen('php://memory', 'rw+');
-        fwrite($stream, json_encode($this->exportData));
-
-        return $stream;
     }
 }
