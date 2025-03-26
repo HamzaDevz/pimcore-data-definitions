@@ -172,7 +172,8 @@ class AssetUrlInterpreter implements InterpreterInterface
             $listing->addConditionParam('am.data = ?', $value);
         }
         $listing->setLimit(1);
-        $listing->setOrder(['creationDate', 'desc']);
+        $listing->setOrderKey('creationDate');
+        $listing->setOrder('desc');
 
         $duplicatedAssets = $listing->getAssets();
 
