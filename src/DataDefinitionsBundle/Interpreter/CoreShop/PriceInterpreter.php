@@ -22,7 +22,7 @@ final class PriceInterpreter implements InterpreterInterface
 {
     public function interpret(InterpreterContextInterface $context): mixed
     {
-        $inputIsFloat = $context->getConfiguration()['isFloat'];
+        $inputIsFloat = $context->getConfiguration()['isFloat'] ?? false;
         $value = $context->getValue();
 
         if (\is_string($value)) {
