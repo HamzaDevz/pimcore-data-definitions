@@ -45,7 +45,7 @@ final class MoneyInterpreter implements InterpreterInterface
 
     private function getValue(string $value, InterpreterContextInterface $context): int
     {
-        $inputIsFloat = $context->getConfiguration()['isFloat'];
+        $inputIsFloat = $context->getConfiguration()['isFloat'] ?? false;
 
         $value = preg_replace('/[^0-9,.]+/', '', $value);
 
