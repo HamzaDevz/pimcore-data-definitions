@@ -26,6 +26,7 @@ use OpenSpout\Writer\WriterInterface;
 use OpenSpout\Writer\XLSX\Writer;
 use Pimcore\Model\Asset;
 use Pimcore\Tool\Storage;
+use Pimcore\File;
 
 class ExcelProvider extends AbstractFileProvider implements ImportProviderInterface, ExportProviderInterface
 {
@@ -132,9 +133,20 @@ class ExcelProvider extends AbstractFileProvider implements ImportProviderInterf
             return;
         }
 
-        $file = $this->getFile($params);
+        if (isset($params['storage'])) {
+            $file = File::getLocalTempFilePath(pathinfo($params['file'], PATHINFO_EXTENSION), true);
+        } else {
+            $file = $this->getFile($params);
+        }
+
         copy($this->getExportPath(), $file);
         unlink($this->getExportPath());
+
+        $this->putFile($file, $params);
+
+        if (isset($params['storage'])) {
+            unlink($file);
+        }
     }
 
     private function createReader($path): ReaderInterface

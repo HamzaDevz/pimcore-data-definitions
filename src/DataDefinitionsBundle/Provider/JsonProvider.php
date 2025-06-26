@@ -20,6 +20,7 @@ use Instride\Bundle\DataDefinitionsBundle\Filter\FilterInterface;
 use Instride\Bundle\DataDefinitionsBundle\Model\ExportDefinitionInterface;
 use Instride\Bundle\DataDefinitionsBundle\Model\ImportDefinitionInterface;
 use Instride\Bundle\DataDefinitionsBundle\Model\ImportMapping\FromColumn;
+use Pimcore\File;
 use RecursiveArrayIterator;
 use RecursiveIteratorIterator;
 
@@ -98,9 +99,19 @@ class JsonProvider extends AbstractFileProvider implements ImportProviderInterfa
             return;
         }
 
-        $file = $this->getFile($params);
+        if (isset($params['storage'])) {
+            $file = File::getLocalTempFilePath(pathinfo($params['file'], PATHINFO_EXTENSION), true);
+        } else {
+            $file = $this->getFile($params);
+        }
 
         file_put_contents($file, json_encode($this->exportData));
+
+        $this->putFile($file, $params);
+
+        if (isset($params['storage'])) {
+            unlink($file);
+        }
     }
 
     public function addExportData(

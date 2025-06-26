@@ -21,6 +21,7 @@ use Instride\Bundle\DataDefinitionsBundle\Filter\FilterInterface;
 use Instride\Bundle\DataDefinitionsBundle\Model\ExportDefinitionInterface;
 use Instride\Bundle\DataDefinitionsBundle\Model\ImportDefinitionInterface;
 use Instride\Bundle\DataDefinitionsBundle\Model\ImportMapping\FromColumn;
+use Pimcore\File;
 use League\Csv\Reader;
 use League\Csv\Statement;
 use League\Csv\Writer;
@@ -128,7 +129,11 @@ class CsvProvider extends AbstractFileProvider implements ImportProviderInterfac
             return;
         }
 
-        $file = $this->getFile($params);
+        if (isset($params['storage'])) {
+            $file = File::getLocalTempFilePath(pathinfo($params['file'], PATHINFO_EXTENSION), true);
+        } else {
+            $file = $this->getFile($params);
+        }
 
         $headers = count($this->exportData) > 0 ? array_keys($this->exportData[0]) : [];
 
@@ -140,6 +145,12 @@ class CsvProvider extends AbstractFileProvider implements ImportProviderInterfac
         }
         $writer->insertOne($headers);
         $writer->insertAll($this->exportData);
+
+        $this->putFile($file, $params);
+
+        if (isset($params['storage'])) {
+            unlink($file);
+        }
     }
 
     public function addExportData(
