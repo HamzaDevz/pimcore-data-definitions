@@ -163,9 +163,20 @@ class XmlProvider extends AbstractFileProvider implements ImportProviderInterfac
             return;
         }
 
-        $file = $this->getFile($params);
+        if (isset($params['storage'])) {
+            $file = File::getLocalTempFilePath(pathinfo($params['file'], PATHINFO_EXTENSION), true);
+        } else {
+            $file = $this->getFile($params);
+        }
+
         copy($this->getExportPath(), $file);
         unlink($this->getExportPath());
+
+        $this->putFile($file, $params);
+
+        if (isset($params['storage'])) {
+            unlink($file);
+        }
     }
 
     private function getXMLWriter(): XMLWriter

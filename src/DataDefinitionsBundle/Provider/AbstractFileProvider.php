@@ -89,4 +89,15 @@ abstract class AbstractFileProvider
 
         return $tmpFilePath;
     }
+
+    protected function putFile(string $path, array $params): void
+    {
+        if (isset($params['storage'], $params['file'])) {
+            $storage = $this->storageLocator->getStorage($params['storage']);
+
+            $stream = fopen($path, 'rb');
+            $storage->writeStream($params['file'], $stream);
+            fclose($stream);
+        }
+    }
 }
